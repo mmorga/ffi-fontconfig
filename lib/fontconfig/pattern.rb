@@ -9,6 +9,11 @@ module Fontconfig
         nil
       end
     end
+
+    def default_substitute
+      Fc.FcDefaultSubstitute(self)
+    end
+
   end
 
   class PatternManaged < FFI::AutoPointer
@@ -27,7 +32,7 @@ module Fontconfig
   class Pattern < FFI::Pointer
     include PatternMethods
 
-    def self.name_parse(name)
+    def self.parse(name)
       Pattern.new(Fc.FcNameParse(name))
     end
 
