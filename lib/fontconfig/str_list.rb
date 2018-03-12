@@ -19,6 +19,12 @@ module Fontconfig
     def del(str)
       Fc.FcStrListDel(to_ptr, str)
     end
+
+    def each
+      while !(ptr = Fc.FcStrListNext(self)).null?
+        yield ptr.read_string
+      end
+    end
   end
 
   class StrListManaged < FFI::AutoPointer
@@ -28,20 +34,16 @@ module Fontconfig
     def initialize(pointer = nil, str_set: nil)
       pointer = Fc.FcStrListCreate(str_set) if str_set
       super(pointer, StrListManaged.method(:release))
+      FcStrListFirst(self)
     end
 
     def self.release(ptr)
       Fc.FcStrListDone(ptr)
     end
-
-    def each
-      while !(ptr = Fc.FcStrListNext(self)).null?
-        yield ptr.read_string
-      end
-    end
   end
 
   class StrList < FFI::Pointer
+    include Enumerable
     include StrListMethods
   end
 end

@@ -108,7 +108,7 @@ module Fontconfig
 
     # TODO: this segfaults - I'm not sure why
     def self.default_langs
-      StrListManaged.new(Fc.FcGetDefaultLangs)
+      StrList.new(Fc.FcGetDefaultLangs)
     end
   end
 end
